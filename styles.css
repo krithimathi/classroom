@@ -7,12 +7,27 @@
 html, body, #app { margin: 0; width: 100%; height: 100%; overflow: hidden; }
 
 #app {
+  --side-w: 245px;
   display: grid;
-  grid-template-columns: 245px 1fr;
+  /* Driven by a custom property: Chrome will not interpolate a
+     grid-template-columns list containing 1fr, so the column is switched
+     outright and the sidebar itself animates. */
+  grid-template-columns: var(--side-w) 1fr;
   grid-template-rows: 70px 1fr;
   grid-template-areas:
     "top top"
     "side main";
+}
+/* Collapsed state: the sidebar slides out and the viewport takes the space. */
+#app.sidebar-collapsed {
+  --side-w: 0px;
+}
+#app.sidebar-collapsed .sidebar {
+  transform: translateX(-100%);
+  overflow: hidden;
+  padding-left: 0;
+  padding-right: 0;
+  pointer-events: none;
 }
 
 .topbar {
@@ -48,6 +63,12 @@ button:hover { background: rgba(255,255,255,.16); }
   overflow-y: auto;
   z-index: 4;
   border-right: 1px solid rgba(255,255,255,.08);
+  transition: transform .22s ease;
+}
+#sidebarToggle {
+  font-size: 13px;
+  padding: 6px 10px;
+  min-width: 118px;
 }
 .sidebar h2 {
   margin: 0 0 10px;

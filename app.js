@@ -15,6 +15,7 @@ import {
   plant, fabricBin, lunchBox, backpack,
 } from './kit.js';
 import { buildLearningZones } from './zones-learning.js';
+import { buildNookZone } from './zones-nook.js';
 import { buildCentreZones } from './zones-centres.js';
 import { buildTeachingZones } from './zones-teaching.js';
 
@@ -140,8 +141,8 @@ for (let x of [-9,0,9]) {
 // holds backpacks. Name plates on every shelf edge, props across the top,
 // leaning foam-board sign on the floor.
 {
-  const g = makeGroup("Student Cubbies", -13.9, 1.5);
-  const UNIT_D = 1.1, UNIT_H = 2.9, UNIT_L = 10.0;
+  const g = makeGroup("Student Cubbies", -13.9, 3.7);
+  const UNIT_D = 1.1, UNIT_H = 2.9, UNIT_L = 7.2;
   const BAYS = 5, PITCH = UNIT_L / BAYS;
   const SHELF_Y = 1.5;
   const topNames = ["Amelia","Benjamin","Lucas","Ethan","Faith"];
@@ -203,7 +204,7 @@ for (let x of [-9,0,9]) {
   sign.userData.tip = "Student Cubbies";
   signPivot.add(sign);
 
-  registerZone("cubbies","Student Cubbies",[-13.4,1.5,1.5],[-7.5,7,15],0x3fa7d6);
+  registerZone("cubbies","Student Cubbies",[-13.4,1.5,3.7],[-7.5,6.5,13],0x3fa7d6);
 }
 
 // ---------------------------------------------------------------- Zone 2: calm corner
@@ -357,11 +358,10 @@ for (let x of [-9,0,9]) {
   registerZone("learning","The Learning Corner",[0.4,5.6,-10.3],[0.4,6.0,0],0x2f8f8f);
 }
 
-// Welcome poster on the left wall, by the entrance
+// Welcome poster on the back wall, left of the calendar boards
 {
-  const g = makeGroup("Welcome", -ROOM_W/2 + .14, -3.2);
-  const w = wallBoard(welcomeTex(), 1.9, 2.4, 0, 4.3, 0, g, 0x2b2b2b, "Welcome to our classroom!");
-  w.rotation.y = Math.PI/2;
+  const g = makeGroup("Welcome", -9.5, -ROOM_D/2 + .14);
+  wallBoard(welcomeTex(), 1.9, 2.4, 0, 4.3, 0, g, 0x2b2b2b, "Welcome to our classroom!");
 }
 
 // ------------------------------------------------- Zone 4: rules + daily calendar
@@ -396,6 +396,7 @@ for (let x of [-9,0,9]) {
 
 // Zones 7-14 live in their own modules so they can be built independently.
 buildLearningZones();   // numbers carpet + classroom library
+buildNookZone();        // window, plushies, bean bags, posters
 buildCentreZones();     // arts, phonics, technology supplies
 
 // Tables
@@ -554,6 +555,22 @@ function floorView() {
     t:0
   };
 }
+// Collapsible sidebar: the grid column animates to zero and the canvas resizes.
+const appEl = document.getElementById('app');
+const sidebarToggle = document.getElementById('sidebarToggle');
+sidebarToggle.onclick = () => {
+  const collapsed = appEl.classList.toggle('sidebar-collapsed');
+  sidebarToggle.textContent = collapsed ? 'Show Areas' : 'Hide Areas';
+  sidebarToggle.setAttribute('aria-expanded', String(!collapsed));
+  // The CSS transition runs for 220ms; resize while it plays and once at the end.
+  const until = performance.now() + 260;
+  const follow = () => {
+    resize();
+    if (performance.now() < until) requestAnimationFrame(follow);
+  };
+  follow();
+};
+
 document.getElementById('homeBtn').onclick=homeView;
 document.getElementById('floorBtn').onclick=floorView;
 
