@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classroom 3D Tour</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div>
+        <h1>Classroom 3D Tour</h1>
+        <p>Rotate • Pan • Scroll to zoom • Click a room area to focus</p>
+      </div>
+      <div class="topbar-actions">
+        <button id="homeBtn">Classroom View</button>
+        <button id="floorBtn">Floor Plan</button>
+        <button id="labelsBtn">Show Labels</button>
+      </div>
+    </header>
+
+    <aside class="sidebar">
+      <h2>Room Areas</h2>
+      <div id="zoneButtons"></div>
+      <div class="hint">
+        <strong>Navigation</strong><br />
+        Left drag = rotate<br />
+        Right drag = pan<br />
+        Mouse wheel = zoom<br />
+        Double-click an object = focus
+      </div>
+    </aside>
+
+    <main id="sceneWrap">
+      <div id="scene"></div>
+      <div id="tooltip"></div>
+    </main>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
